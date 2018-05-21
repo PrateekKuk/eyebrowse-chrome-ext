@@ -71,9 +71,9 @@ function highlighting(user, baseUrl) {
     //   }
     // });
 
-    $.get(baseUrl + "/tags/common_tags").done(function(res) {
-      all_tags = res.common_tags;
-    });
+    // $.get(baseUrl + "/tags/common_tags").done(function(res) {
+    //   all_tags = res.common_tags;
+    // });
 
     $('body').on('mouseenter', '.side-panel', function() {
       $('body').css('overflow', 'hidden');
@@ -520,7 +520,8 @@ function highlighting(user, baseUrl) {
       var comment = $(".highlight-add-comment-box").text();
       var hl_id = $(this).attr("highlight_id");
 
-      $.post(baseUrl + "/tags/initialize_page", {
+      //$.post(baseUrl + "/tags/initialize_page"
+      $.post(baseUrl + "/tags/initialize_page_highlight", {
         "url": url,
         "domain_name": domain_name,
         "title": title,
@@ -528,7 +529,7 @@ function highlighting(user, baseUrl) {
         //"add_usertags": "true",
         "csrfmiddlewaretoken": user.csrf,
       }).done(function(res) {
-        $.post(baseUrl + "/tags/highlight", {
+        $.post(baseUrl + "/tags/add_highlight_id", {
           "url": url,
           // "tags": JSON.stringify(tags_with_highlight),
           "highlight_id": hl_id,
@@ -569,9 +570,8 @@ function highlighting(user, baseUrl) {
 
           if (comment.length > 0) {
             console.log("Comment being made")
-            //addComment(url, comment, res.data.highlight_id, tags_with_comment, callback);
             addComment(url, comment, res.data.highlight_id, callback);
-
+            //addComment(url, comment, res.data.highlight_id, tags_with_comment, callback);
           } else {
             callback();
           }
@@ -647,8 +647,9 @@ function highlighting(user, baseUrl) {
         $('.annote-text').animate({"height": "auto"});
 
         var annote_text_wrapper = $("<div>", {"class": "annote-text-wrapper"});
-
-        $.get(baseUrl + "/tags/highlight/comments", {
+        
+        //$.get(baseUrl + "/tags/highlight/comments"
+        $.get(baseUrl + "/tags/highlight/highlight_comments", {
           "highlight_id": highlight,
         }).done(function(res) {
           var comment_wrapper = $("<div>", {"class": "comment-wrapper"});
@@ -682,8 +683,9 @@ function highlighting(user, baseUrl) {
           comment_wrapper.append(comments_wrapper);
 
           var contributed = res.user_contributed;
-
-          $.get(baseUrl + "/tags/tags/highlight", {
+          
+          //$.get(baseUrl + "/tags/tags/highlight"
+          $.get(baseUrl + "/tags/tags/highlight_id", {
             "highlight_id": highlight,
             "url": url,
           }).done(function(res) {
@@ -1301,7 +1303,8 @@ function highlighting(user, baseUrl) {
 
 // load highlights on page load 
 function getHighlights(url) {
-  $.get(baseUrl + "/tags/highlights", {
+  //$.get(baseUrl + "/tags/highlights"
+  $.get(baseUrl + "/tags/highlights_all", {
     "url": url,
   }).done(function(res) {
     if (res.success) {
@@ -1414,14 +1417,14 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     // }
   }
 
-  if (request.type === "initialize_page") {
-    $.get(baseUrl + "/tags/tags/page", {
-      url: request.page_url,
-    }).done(function(res) {
-      if (res.success) {
-        generated_tags = res.tags;
-      }
-    });
-  }
+  // if (request.type === "initialize_page") {
+  //   $.get(baseUrl + "/tags/tags/page", {
+  //     url: request.page_url,
+  //   }).done(function(res) {
+  //     if (res.success) {
+  //       generated_tags = res.tags;
+  //     }
+  //   });
+  // }
  
 });
